@@ -1,0 +1,30 @@
+{
+  "name": "sprint-challenge-node-express",
+  "version": "1.0.0",
+  "description": "node-express assignment",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emaquino44/Sprint-Challenge-Node-Express.git"
+  },
+  "author": "emmeline",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emaquino44/Sprint-Challenge-Node-Express/issues"
+  },
+  "homepage": "https://github.com/emaquino44/Sprint-Challenge-Node-Express#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "helmet": "^3.13.0",
+    "knex": "^0.15.2",
+    "npm": "^6.2.0",
+    "sqlite3": "^4.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
