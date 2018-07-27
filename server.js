@@ -58,5 +58,31 @@ server.post('/api/projects', (req, res) => {
     }
 });
 
+server.delete('/api/projects/:id', (req, res) => {
+    const { id } = req.params
+    projectDb.remove(id)
+        .then( response => {
+            if (response) {
+                res.status(200)
+                projectDb.get()
+                    .then( projects => {
+                        res.status(200).json(projects)
+                    })
+                    .catch( error => {
+                        res.status(500).json({ error: "Unable to locate projects" })
+                    })
+            } else {
+                res.status(404).json({ error: `Not able to retrieve this project ${id}` })
+            }
+        })
+        .catch ( error => {
+            res.status(500).json({ error: `Error- Not able to delete project ${id}` })
+        })
+})
+
+
+
+
+
 //server is listening
 server.listen(5000, () => console.log('API is running'));
