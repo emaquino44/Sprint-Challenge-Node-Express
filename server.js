@@ -43,6 +43,20 @@ server.get('/api/projects/:id', (req, res) => {
         })
 });
 
+server.post('/api/projects', (req, res) => {
+    const { name, description, completed } = req.body
+    if (!name || !description) {
+        res.status(400).json({ error: "Please add name and description of your project." })
+    } else {
+        projectDb.insert({ name, description, completed })
+            .then( project => {
+                res.status(201).json(project)
+            })
+            .catch( error => {
+                res.status(500).json({ error: "Error in creating project" });
+            })
+    }
+});
 
 //server is listening
 server.listen(5000, () => console.log('API is running'));
