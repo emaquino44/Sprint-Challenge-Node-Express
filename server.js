@@ -99,6 +99,25 @@ server.put('/api/projects/:id', (req, res) => {
     }
 })
 
+
+//Retrieve list of actions for a project
+server.get('/api/projects/:id/actions', (req, res) => {
+    const { id } = req.params
+    projectDb.getProjectActions(id)
+        .then(projectActions => {
+            res.status(200).json(projectActions)
+        })
+        .catch( error => {
+            res.status(500).json({ error: `Not able to retrieve list of actions for this project ${id}` })
+        })
+})
+
+
+
+
+
+
+
 //**********ACTIONS ENDPOINTS***************
 server.get('/api/actions', (req, res) => {
 	actionDb.get()
