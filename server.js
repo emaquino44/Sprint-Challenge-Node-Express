@@ -107,15 +107,16 @@ server.get('/api/actions', (req, res) => {
 		});
 });
 
-// server.get('/api/actions', (req, res) => {
-//     actions.get()
-//         .then( actionsList => {
-//             res.status(200).json(actionsList)
-//         })
-//         .catch( error => {
-//             res.status(500).json({ error: "Unable to get actions" })
-//         })
-// })
+server.get('/api/actions/:id', (req, res) => {
+    const { id } = req.params
+    actionDb.get(id)
+        .then( actions => {
+            res.status(200).json(actions)
+        })
+        .catch( error => {
+            res.status(404).json({ error: `Not able to retrieve this action ${id}` })
+        })
+})
 
 
 
