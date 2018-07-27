@@ -3,9 +3,11 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 
-
 const server = express();
 const port = 5000;
+
+const projectDb = require("./data/helpers/projectModel.js");
+
 
 //middleware
 server.use(express.json());
@@ -18,6 +20,18 @@ server.get('/', (req, res) => {
 
   res.send('Hello World');
 });
+
+//**********PROJECT ENDPOINTS***************
+server.get('/api/projects', (req, res) => {
+	projectDb.get()
+		.then(projects => {
+			res.status(200).json({projects});
+		})
+		.catch(err => {
+			res.status(500).json({error: "Unable to get list of project."});
+		});
+});
+
 
 
 
