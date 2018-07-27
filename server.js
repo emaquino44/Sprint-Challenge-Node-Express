@@ -7,7 +7,7 @@ const server = express();
 const port = 5000;
 
 const projectDb = require("./data/helpers/projectModel.js");
-
+const actionDb = require("./data/helpers/actionModel.js");
 
 //middleware
 server.use(express.json());
@@ -95,6 +95,30 @@ server.put('/api/projects/:id', (req, res) => {
             })
     }
 })
+
+//**********ACTIONS ENDPOINTS***************
+server.get('/api/actions', (req, res) => {
+	actionDb.get()
+		.then(actions => {
+			res.status(200).json({actions});
+		})
+		.catch(err => {
+			res.status(500).json({error: "Unable to get list of actions."});
+		});
+});
+
+// server.get('/api/actions', (req, res) => {
+//     actions.get()
+//         .then( actionsList => {
+//             res.status(200).json(actionsList)
+//         })
+//         .catch( error => {
+//             res.status(500).json({ error: "Unable to get actions" })
+//         })
+// })
+
+
+
 
 
 
