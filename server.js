@@ -47,7 +47,10 @@ server.post('/api/projects', (req, res) => {
     const { name, description, completed } = req.body
     if (!name || !description) {
         res.status(400).json({ error: "Please add name and description of your project." })
-    } else {
+    }
+    if (name > 120) {
+    	res.status(400).json({error: "Name exceeds character limit"});
+    }else {
         projectDb.insert({ name, description, completed })
             .then( project => {
                 res.status(201).json(project)
@@ -118,10 +121,91 @@ server.get('/api/actions/:id', (req, res) => {
         })
 })
 
+// server.post('/api/projects/:id/actions', (req, res) => {
+//     const { id } = req.params
+//     const { description, notes, completed } = req.body
 
+//     if (!description) {
+//         res.status(400).json({ error: "Add a description" })
+//     } if (description > 128){
+//     		res.status(400).json({ error: "Description is too long."})
+//     }
+//     else {
+//         let newAdd = null
+//         if (notes !== undefined) {
+//             newAdd = actionDb.insert({
+//                 project_id: id,
+//                 description: description,
+//                 notes: notes,
+//                 completed: completed
+//             })
+//          } else {
+//             newAdd = actionDb.insert({
+//                 project_id: id,
+//                 description: description,
+//                 notes: '',
+//                 completed: completed
+//             })
+//         }
+//             newAdd.then( action => {
+//                 res.status(201).json(action)
+//             })
+//             .catch( error => {
+//                 res.status(500).json({ error: `Unable to create an action for this project ${id}` })
+//             })
+//     }
+// })
 
+server.delete('/api/actions/:id', (req, res) => {
+    const { id } = req.params
+    actionDb.remove(id)
+        .then( response => {
+            if (response) {
+                res.status(200)
+                actionDb.get()
+                    .then( actions => {
+                        res.status(200).json(actions)
+                    })
+                    .catch( error => {
+                        res.status(500).json({ error: "Not able to retrieve list actions" })
+                    })
+            } else {
+                res.status(404).json({ error: `Not able to delete this action ${id}` })
+            }
+        })
+        .catch ( error => {
+            res.status(500).json({ error: `Not able to delete this action ${id}` })
+        })
+})
 
-
+server.put('/api/actions/:id', (req, res) => {
+    const { id } = req.params
+    const { description, notes, completed } = req.body
+    if (!description) {
+        res.status(400).json({ error: "Add a description" })
+    } else {
+        let newUpdate = null
+        if (notes) {
+            newUpdate = actionDb.update( id, {
+                description: description,
+                notes: notes,
+                completed: completed
+            })
+         } else {
+            newUpdate = actionDb.update(id, {
+                description: description,
+                notes: '',
+                completed: completed
+            })
+        }
+            newUpdate.then( action => {
+                res.status(201).json(action)
+            })
+            .catch( error => {
+                res.status(500).json({ error: `Not able to update this action ${id}` })
+            })
+    }
+})
 
 
 //server is listening
