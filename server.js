@@ -32,7 +32,16 @@ server.get('/api/projects', (req, res) => {
 		});
 });
 
-
+server.get('/api/projects/:id', (req, res) => {
+    const { id } = req.params
+    projectDb.get(id)
+        .then( project => {
+            res.status(200).json(project)
+        })
+        .catch( error => {
+            res.status(404).json({ error: `Unable to locate this project ${id}` })
+        })
+});
 
 
 //server is listening
