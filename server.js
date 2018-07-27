@@ -121,40 +121,20 @@ server.get('/api/actions/:id', (req, res) => {
         })
 })
 
-// server.post('/api/projects/:id/actions', (req, res) => {
-//     const { id } = req.params
-//     const { description, notes, completed } = req.body
-
-//     if (!description) {
-//         res.status(400).json({ error: "Add a description" })
-//     } if (description > 128){
-//     		res.status(400).json({ error: "Description is too long."})
-//     }
-//     else {
-//         let newAdd = null
-//         if (notes !== undefined) {
-//             newAdd = actionDb.insert({
-//                 project_id: id,
-//                 description: description,
-//                 notes: notes,
-//                 completed: completed
-//             })
-//          } else {
-//             newAdd = actionDb.insert({
-//                 project_id: id,
-//                 description: description,
-//                 notes: '',
-//                 completed: completed
-//             })
-//         }
-//             newAdd.then( action => {
-//                 res.status(201).json(action)
-//             })
-//             .catch( error => {
-//                 res.status(500).json({ error: `Unable to create an action for this project ${id}` })
-//             })
-//     }
-// })
+server.post('/api/actions', (req, res) => {
+    const { description, project_id,  notes, completed } = req.body;
+    const info = { description, project_id,  notes, completed }
+    if(!project_id || !description){
+        res.status(400).json({ error: 'Add project_id and description.' })
+    }
+    actionDb.insert(info)
+        .then(action => {
+        res.status(201).json(action);
+    })
+    .catch(err => {
+        res.status(500).json({ error: 'Error in creating action.' })
+    })
+})
 
 server.delete('/api/actions/:id', (req, res) => {
     const { id } = req.params
@@ -178,34 +158,7 @@ server.delete('/api/actions/:id', (req, res) => {
         })
 })
 
-server.put('/api/actions/:id', (req, res) => {
-    const { id } = req.params
-    const { description, notes, completed } = req.body
-    if (!description) {
-        res.status(400).json({ error: "Add a description" })
-    } else {
-        let newUpdate = null
-        if (notes) {
-            newUpdate = actionDb.update( id, {
-                description: description,
-                notes: notes,
-                completed: completed
-            })
-         } else {
-            newUpdate = actionDb.update(id, {
-                description: description,
-                notes: '',
-                completed: completed
-            })
-        }
-            newUpdate.then( action => {
-                res.status(201).json(action)
-            })
-            .catch( error => {
-                res.status(500).json({ error: `Not able to update this action ${id}` })
-            })
-    }
-})
+
 
 
 //server is listening
