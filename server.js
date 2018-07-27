@@ -114,10 +114,6 @@ server.get('/api/projects/:id/actions', (req, res) => {
 
 
 
-
-
-
-
 //**********ACTIONS ENDPOINTS***************
 server.get('/api/actions', (req, res) => {
 	actionDb.get()
@@ -147,8 +143,8 @@ server.post('/api/actions', (req, res) => {
         res.status(400).json({ error: 'Add project_id and description.' })
     }
     actionDb.insert(info)
-        .then(action => {
-        res.status(201).json(action);
+        .then(actions => {
+        res.status(201).json(actions);
     })
     .catch(err => {
         res.status(500).json({ error: 'Error in creating action.' })
