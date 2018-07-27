@@ -173,15 +173,15 @@ server.delete('/api/actions/:id', (req, res) => {
         })
 })
 
-server.put('/api/projects/:id', (req, res) => {
+server.put('/api/actions/:id', (req, res) => {
     const { id } = req.params
     const { project_id, description, notes, compoleted } = req.body
     if (!project_id || !description) {
         res.status(400).json({ error: "Add a project id and description to this project" })
     } else {
         actionDb.update(id, { project_id, description })
-            .then( action => {
-                actionDb ? res.status(201).json(action) : res.status(500).json({ error: `Unable to update project with id ${id}` })
+            .then( actions => {
+                actionDb ? res.status(201).json(actions) : res.status(500).json({ error: `Unable to update project with id ${id}` })
             })
             .catch( error => {
                 res.status(500).json({ error: `Error - Not able to update this project. ${id}` })
