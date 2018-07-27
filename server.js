@@ -69,7 +69,7 @@ server.delete('/api/projects/:id', (req, res) => {
                         res.status(200).json(projects)
                     })
                     .catch( error => {
-                        res.status(500).json({ error: "Unable to locate projects" })
+                        res.status(500).json({ error: "Unable to locate list of projects" })
                     })
             } else {
                 res.status(404).json({ error: `Not able to retrieve this project ${id}` })
@@ -80,6 +80,21 @@ server.delete('/api/projects/:id', (req, res) => {
         })
 })
 
+server.put('/api/projects/:id', (req, res) => {
+    const { id } = req.params
+    const { name, description, completed } = req.body
+    if (!name || !description) {
+        res.status(400).json({ error: "Add a name and description to this project" })
+    } else {
+        projectDb.update(id, { name, description, completed })
+            .then( project => {
+                projectDb ? res.status(201).json(project) : res.status(500).json({ error: `Unable to update project with id ${id}` })
+            })
+            .catch( error => {
+                res.status(500).json({ error: `Error - Not able to update this project. ${id}` })
+            })
+    }
+})
 
 
 
